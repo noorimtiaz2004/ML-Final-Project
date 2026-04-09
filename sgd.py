@@ -22,7 +22,7 @@ def run_sgd(train_features, train_labels, n_iterations):
         #  Update weight vector
         w = [w[i] - eta * gradient[i] for i in range(5)]
     
-        # Project w back to the unit ball if its norm exceeds 1
+        # Project w back to the unit ball if its norm exceeds 1 dajkd
         w_norm = math.sqrt(sum(val**2 for val in w))
         if w_norm > 1:
             w = [val / w_norm for val in w]
