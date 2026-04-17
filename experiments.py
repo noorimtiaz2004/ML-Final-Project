@@ -1,3 +1,5 @@
+# Author: Noor Imtiaz
+
 import numpy as np
 from evaluation import evaluate_predictor
 from sgd import run_sgd
