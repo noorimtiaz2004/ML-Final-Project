@@ -1,3 +1,5 @@
+# Author: Jayden & Noor 
+
 from experiments import run_experiments
 from plot import print_results_table, create_plots
 
