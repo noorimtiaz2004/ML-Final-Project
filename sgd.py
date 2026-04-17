@@ -1,3 +1,4 @@
+# Author: Noor Imtiaz
 
 import math
 import matplotlib.pyplot as plt
