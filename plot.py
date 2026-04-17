@@ -10,22 +10,17 @@ def create_plots(results):
         res = results[sigma]
         marker_style, color, line_style = styles[sigma]
 
-        # Plot 1: Excess Risk with error band
-        ax1.plot(res['n'], res['excess_risk'], marker=marker_style[0], color=color, label=f'σ = {sigma}', linewidth=2, markersize=10)
-        ax1.fill_between(res['n'],
-                        [m-s for m, s in zip(res['excess_risk'], res['std_loss'])],
-                        [m+s for m, s in zip(res['excess_risk'], res['std_loss'])],
-                        color=color, alpha=0.15)
-        # Annotate last point
-        ax1.annotate(f"{res['excess_risk'][-1]:.3f}", (res['n'][-1], res['excess_risk'][-1]), textcoords="offset points", xytext=(0,10), ha='center', fontsize=12)
+        # Plot 1: Excess Risk with error bars (std of loss estimates)
+        ax1.errorbar(res['n'], res['excess_risk'], yerr=res['std_loss'],
+                     marker=marker_style[0], color=color, linestyle=line_style,
+                     label=f'σ = {sigma}', linewidth=2, markersize=10,
+                     capsize=5, capthick=2)
 
-        # Plot 2: Classification Error with error band
-        ax2.plot(res['n'], res['mean_error'], marker=marker_style[0], color=color, label=f'σ = {sigma}', linewidth=2, markersize=10)
-        ax2.fill_between(res['n'],
-                        [m-s for m, s in zip(res['mean_error'], res['std_error'])],
-                        [m+s for m, s in zip(res['mean_error'], res['std_error'])],
-                        color=color, alpha=0.15)
-        ax2.annotate(f"{res['mean_error'][-1]:.3f}", (res['n'][-1], res['mean_error'][-1]), textcoords="offset points", xytext=(0,10), ha='center', fontsize=12)
+        # Plot 2: Classification Error with error bars (std of error estimates)
+        ax2.errorbar(res['n'], res['mean_error'], yerr=res['std_error'],
+                     marker=marker_style[0], color=color, linestyle=line_style,
+                     label=f'σ = {sigma}', linewidth=2, markersize=10,
+                     capsize=5, capthick=2)
 
     # Format Plot 1
     ax1.set_title("Expected Excess Risk vs Training Set Size", fontsize=16, fontweight='bold', pad=15)
