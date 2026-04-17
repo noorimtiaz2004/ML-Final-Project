@@ -20,8 +20,8 @@ def run_sgd(train_features, train_labels, n_iterations):
         # Create augmented feature vector x_tilde = (x, 1)
         x_tilde = np.append(x, 1.0)
         
-        # Learning rate (time-decaying)
-        eta = 1.0 / math.sqrt(t)
+        # Learning rate where sqrt(2) is lipschitz bound
+        eta = 1.0 / (math.sqrt(2) * math.sqrt(t))
         
         # Compute gradient of logistic loss
         # gradient = -y * x_tilde / (1 + exp(y * <w, x_tilde>))
