@@ -5,48 +5,61 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def run_sgd(train_features, train_labels, n_iterations):
-    # Initialize w as a 5d vector 
+    """
+    Stochastic Gradient Descent (SGD) Algorithm
+    
+    Parameters:
+        train_features: Training data features
+        train_labels: Training data labels
+        n_iterations: Integer T > 0 (number of iterations)
+    
+    Returns:
+        w_bar: Averaged weight vector 
+    """
+    # Parameter T
+    T = n_iterations
+    
+    # Initialize: w^(1) = 0
     w = np.array([0.0] * 5)
     
-    # Store all weight vectors for Polyak-Ruppert averaging
+    # Accumulator for output: w̄ = (1/T) * Σ w^(t)
     w_sum = np.zeros(5)
     
-    for t in range(1, n_iterations + 1):
-        # Get random example (stochastic sampling)
+    # Algorithm Loop: For t = 1, 2, ..., T
+    for t in range(1, T + 1):
+        # Step 1: Sample z ~ D (sample training example)
         idx = np.random.randint(0, len(train_features))
-        x = train_features[idx]
-        y = train_labels[idx]
+        z = (train_features[idx], train_labels[idx])
+        x, y = z
         
         # Create augmented feature vector x_tilde = (x, 1)
         x_tilde = np.append(x, 1.0)
         
-        # Learning rate where sqrt(2) is lipschitz bound
-        eta = 1.0 / (math.sqrt(2) * math.sqrt(t))
-        
-        # Compute gradient of logistic loss
-        # gradient = -y * x_tilde / (1 + exp(y * <w, x_tilde>))
+        # Step 2: Pick v_t ∈ ∂ℓ(w^(t), z) (compute subgradient)
+        # For logistic loss: v_t = -y * x_tilde / (1 + exp(y * <w, x_tilde>))
         dot_product = np.dot(w, x_tilde)
-        
-        
         exponent = y * dot_product
-        exponent = np.clip(exponent, -500, 500)  # Prevent overflow
-
+        exponent = np.clip(exponent, -500, 500)  # Numerical stability
         denominator = 1.0 + math.exp(exponent)
-        gradient = (-y * x_tilde) / denominator
+        v_t = (-y * x_tilde) / denominator
         
-        # Update weight vector
-        w = w - eta * gradient
+        # Step 3: Set learning rate η_t = 1/√(2t)
+        eta_t = 1.0 / math.sqrt(2 * t)
         
-        # Project w back onto unit ball (constrained optimization)
+        # Step 4: Update w^(t+1) = w^(t) - η_t * v_t
+        w = w - eta_t * v_t
+        
+        # Step 5: Project w^(t+1) onto unit ball
+        # If ||w^(t+1)|| > 1, then w^(t+1) = w^(t+1) / ||w^(t+1)||
         w_norm = np.linalg.norm(w)
         if w_norm > 1:
             w = w / w_norm
         
-        # Accumulate weights for averaging
+        # Accumulate for averaging
         w_sum += w
     
-    # Return Polyak-Ruppert average
-    w_bar = w_sum / n_iterations
+    # Output: w̄ = (1/T) * Σ_{t=1}^T w^(t)
+    w_bar = w_sum / T
     return w_bar
 
 
