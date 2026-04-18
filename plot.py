@@ -12,13 +12,13 @@ def create_plots(results):
         res = results[sigma]
         marker_style, color, line_style = styles[sigma]
 
-        # Plot 1: Excess Risk with error bars (std of loss estimates)
+        # Plot 1: Excess Risk 
         ax1.errorbar(res['n'], res['excess_risk'], yerr=res['std_loss'],
                      marker=marker_style[0], color=color, linestyle=line_style,
                      label=f'σ = {sigma}', linewidth=2, markersize=10,
                      capsize=5, capthick=2)
 
-        # Plot 2: Classification Error with error bars (std of error estimates)
+        # Plot 2: Classification Error 
         ax2.errorbar(res['n'], res['mean_error'], yerr=res['std_error'],
                      marker=marker_style[0], color=color, linestyle=line_style,
                      label=f'σ = {sigma}', linewidth=2, markersize=10,
@@ -46,9 +46,6 @@ def create_plots(results):
 
 
 def print_results_table(results):
-    """
-    Print results in the table format required by the report.
-    """
     print("\n" + "="*120)
     print("RESULTS TABLE")
     print("="*120)

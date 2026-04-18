@@ -1,4 +1,4 @@
-# Author: Noor Imtiaz
+#Author: Noor Imtiaz
 
 import numpy as np
 import math
@@ -16,7 +16,7 @@ def evaluate_predictor(w, test_features, test_labels):
         
         dot_product = np.dot(w, x_tilde)
         
-        # Compute logistic loss with numerical stability
+        # Compute logistic loss using a practical implementation to prevent overflow when the dot product is large
         exponent = -y * dot_product
         exponent = np.clip(exponent, -500, 500)
         total_loss += math.log(1.0 + math.exp(exponent))
